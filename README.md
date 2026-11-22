@@ -12,6 +12,10 @@ A collection of skills for Claude Code and other AI agents, for everyday product
 | [paste-ready-output](#paste-ready-output) | Plain text that pastes cleanly into web editors and forms, with measured word counts |
 | [safe-repo-operations](#safe-repo-operations) | Careful git and GitHub procedure for pushing, archiving, resetting, force-pushing and renaming |
 | [python-env-first](#python-env-first) | Pick the right Python and virtualenv before running anything |
+| [verify-live-state](#verify-live-state) | Re-check live state (all pages, latest PR commits, API version gaps) before reporting findings |
+| [safe-production-changes](#safe-production-changes) | Dry run, snapshot, canary and environment checks before state-changing work on live systems |
+| [plan-before-building](#plan-before-building) | Lock scope, environments and verification in a short plan before implementing |
+| [docs-update-verify-loop](#docs-update-verify-loop) | Chunked wiki and diagram updates with a fetch-and-verify pass |
 
 **Tools and methods**
 
@@ -22,6 +26,8 @@ A collection of skills for Claude Code and other AI agents, for everyday product
 | [youtube-playlist-extractor](#youtube-playlist-extractor) | Pull video titles and URLs from a YouTube playlist without an API key |
 | [goldfish-review](#goldfish-review) | Fresh-context fact-check and cold read of a finished draft |
 | [deep-research-methodology](#deep-research-methodology) | Independence audit, adversarial critic and citation checks for cited research |
+| [confluence-storage-format](#confluence-storage-format) | Confluence storage-format rules for macros, code blocks and page updates through an MCP server or API |
+| [drawio-confluence-diagrams](#drawio-confluence-diagrams) | Draw.io styling, straight-line routing and label rules, published to Confluence as editable attachments |
 
 ### compress-pdf
 
@@ -244,6 +250,118 @@ Run this script with the project's own virtualenv, not the system Python
 - Checks versions and flags interpreters that are too old
 - Table of common failures (missing stdlib functions, certificate errors, "bad interpreter" after a move) and their fixes
 - Runs scripts in isolated mode when the folder holds downloaded files
+
+---
+
+### verify-live-state
+
+Re-check live data before stating a finding. Complements `verify-before-delivery`, which checks finished artifacts.
+
+**How to Use:**
+
+```
+Investigate why this job fails, and use verify-live-state
+```
+
+**What It Does:**
+
+- Follows every page of API results instead of computing from the first page
+- Retries on the beta endpoint or in the UI when a stable API hides an object
+- Re-fetches the latest PR commits before drafting review comments
+- Ends findings with what was checked, how much, and what could not be verified
+
+---
+
+### safe-production-changes
+
+Guardrails for state-changing work on live systems such as tickets, cloud resources and directory groups. Complements `safe-repo-operations`, which covers git and GitHub.
+
+**How to Use:**
+
+```
+Update these tickets in bulk, using safe-production-changes
+```
+
+**What It Does:**
+
+- Names the target environments and reports which one was actually changed
+- Requires a `--dry-run`, a state snapshot and a canary before the full run
+- Forbids write tests on real data and deleting resources the agent did not create
+- Produces an audit report of before and after values
+
+---
+
+### plan-before-building
+
+A five-line written plan agreed before implementation, so shifting requirements do not cause repeated redesigns.
+
+**How to Use:**
+
+```
+Plan this first with plan-before-building, then wait for my OK
+```
+
+**What It Does:**
+
+- Records scope, out-of-scope items, environments, style rules, verification and undo
+- Asks only the questions that change the plan, each with a default
+- Updates the plan in a few lines when requirements change, so dropped items do not return
+
+---
+
+### docs-update-verify-loop
+
+Update wiki or Confluence pages and diagrams safely through an API or MCP server.
+
+**How to Use:**
+
+```
+Sync the architecture pages to the merged code, using docs-update-verify-loop
+```
+
+**What It Does:**
+
+- Keeps page content to the current state, with no pending-change or status notes
+- Writes in chunks and re-reads the revision first so a newer edit is never overwritten
+- Re-fetches the page and renders each diagram attachment after the update
+- Finishes with a page-by-page pass or fail table with evidence
+
+---
+
+### confluence-storage-format
+
+Rules for writing Confluence storage-format XHTML, so macro content is not silently dropped.
+
+**How to Use:**
+
+```
+Create this Confluence page with a code block and an info box
+```
+
+**What It Does:**
+
+- Distinguishes `plain-text-body` (code, noformat) from `rich-text-body` (info, tip, expand)
+- Gives working templates for code blocks, info boxes and expand macros with nested code
+- Defines the update workflow: locate the page, write storage format directly, replace content
+
+---
+
+### drawio-confluence-diagrams
+
+Draw.io diagram rules for Confluence pages, with Confluence publishing steps.
+
+**How to Use:**
+
+```
+Draw the container view as a Draw.io diagram and publish it to the page
+```
+
+**What It Does:**
+
+- Sharp-cornered boxes, a standard colour palette and orthogonal edges with arc jumps
+- Straight connectors wherever possible, with exit and entry points computed from a shared coordinate
+- Edge labels that stay fully visible, off borders and boxes
+- Render, check and upload under a new file name, then compare file sizes
 
 ## Using a Skill
 
