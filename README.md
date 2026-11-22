@@ -4,6 +4,14 @@ A collection of Claude skills for everyday productivity tasks.
 
 ## Skills
 
+| Skill | What it does |
+|---|---|
+| [compress-pdf](#compress-pdf) | Compress a PDF to a target size with Ghostscript |
+| [linkedin-link-extractor](#linkedin-link-extractor) | Resolve and summarise `lnkd.in` links from LinkedIn posts |
+| [youtube-playlist-extractor](#youtube-playlist-extractor) | Pull video titles and URLs from a YouTube playlist without an API key |
+| [goldfish-review](#goldfish-review) | Fresh-context fact-check and cold read of a finished draft |
+| [deep-research-methodology](#deep-research-methodology) | Independence audit, adversarial critic and citation checks for cited research |
+
 ### compress-pdf
 
 Compress PDF files to a target size using Ghostscript while maintaining the best possible quality.
@@ -78,6 +86,29 @@ REPOS
 
 ---
 
+### youtube-playlist-extractor
+
+Extract video titles and URLs from a YouTube playlist using `curl` and the page's embedded `ytInitialData` JSON. No API key and no `yt-dlp`.
+
+**How to Use:**
+
+```
+Get the video titles and URLs from this playlist: https://www.youtube.com/playlist?list=PLxxxxxxxx
+```
+
+**What It Does:**
+
+- Parses the embedded JSON instead of regex-matching IDs and titles, which pairs the wrong title with a video
+- Deduplicates videos and skips UI strings that look like titles
+- Handles Unicode and HTML entities in titles
+- Includes variations for several playlists at once and for CSV or JSON output
+
+**Not for:** downloading videos (use `yt-dlp`), or playlists that need authentication.
+
+**Requirements:** `curl` and Python 3 (standard library only).
+
+---
+
 ### goldfish-review
 
 Fresh-context review of a finished draft before it ships. Two reviewers that have never seen your drafting conversation attack it: a fact-checker that sees only the draft and the raw sources, and a cold reader that sees only the text.
@@ -135,7 +166,7 @@ Adapted from the methodology of `jordan-gibbs/hyperresearch` (MIT). No code from
    python -m venv .venv
    source .venv/bin/activate
    ```
-3. Install Python dependencies:
+3. Install Python dependencies (only `linkedin-link-extractor` needs them):
    ```bash
    pip install -r requirements.txt
    ```
