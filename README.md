@@ -4,6 +4,17 @@ A collection of skills for Claude Code and other AI agents, for everyday product
 
 ## Skills
 
+**Working practices** (how the agent should work; each triggers on its own situation)
+
+| Skill | What it does |
+|---|---|
+| [verify-before-delivery](#verify-before-delivery) | Measured self-check before handing over any document, spreadsheet, image set or script |
+| [paste-ready-output](#paste-ready-output) | Plain text that pastes cleanly into web editors and forms, with measured word counts |
+| [safe-repo-operations](#safe-repo-operations) | Careful git and GitHub procedure for pushing, archiving, resetting, force-pushing and renaming |
+| [python-env-first](#python-env-first) | Pick the right Python and virtualenv before running anything |
+
+**Tools and methods**
+
 | Skill | What it does |
 |---|---|
 | [compress-pdf](#compress-pdf) | Compress a PDF to a target size with Ghostscript |
@@ -151,6 +162,88 @@ Do a deep research pass on whether this claim holds up, with sources that are ac
 - Checks each citation against the source text and checks papers for retraction
 
 Adapted from the methodology of `jordan-gibbs/hyperresearch` (MIT). No code from that project is used.
+
+---
+
+### verify-before-delivery
+
+A checklist the agent runs before presenting a finished result, so mistakes are caught by the agent instead of the user.
+
+**How to Use:**
+
+```
+Before you give me the final version, verify it and tell me what you could not check
+```
+
+**What It Does:**
+
+- Counts words and pages with a tool instead of estimating, and checks the draft against the rubric line by line
+- Renders every page of a PDF or document, not just page 1
+- Recalculates spreadsheet formulas and checks for error cells
+- Views every image crop to confirm they are distinct and in order
+- Ends with two lists: what was verified (with the numbers) and what was not
+
+---
+
+### paste-ready-output
+
+Produce text that pastes cleanly into a web form, learning-management-system editor, CMS or email without breaking.
+
+**How to Use:**
+
+```
+Give me this as plain text I can paste into the editor, under 500 words
+```
+
+**What It Does:**
+
+- Defaults to plain text: no HTML, no markdown tables or pipe characters, no doubled blank lines
+- Puts field labels on their own lines so a paste cannot run them together
+- Counts words and states the number against the limit; offers a short version
+- Reuses a known-good earlier file as the format template
+
+---
+
+### safe-repo-operations
+
+A careful procedure for risky git and GitHub operations: look first, back up, do the smallest operation that works, then prove the result.
+
+**How to Use:**
+
+```
+Archive the old repo, reset it to upstream exactly, and push
+```
+
+```
+Rename this repo and fix the local folder and virtualenv
+```
+
+**What It Does:**
+
+- Pre-flight checks of branches, unpushed commits, visibility and unrelated histories
+- Public versus private triage before anything is published
+- Backup branches, exact resets to upstream, and `--force-with-lease` with a full SHA, only when asked
+- A rename checklist covering the remote, README, local folder, virtualenv paths and path-keyed settings
+- Post-push verification and an honest note about what GitHub still caches after a history rewrite
+
+---
+
+### python-env-first
+
+Choose the right interpreter and environment before running Python, so an outdated system Python or a duplicate virtualenv does not cost a round of confusing errors.
+
+**How to Use:**
+
+```
+Run this script with the project's own virtualenv, not the system Python
+```
+
+**What It Does:**
+
+- Finds and reuses the project's virtualenv; asks before creating one
+- Checks versions and flags interpreters that are too old
+- Table of common failures (missing stdlib functions, certificate errors, "bad interpreter" after a move) and their fixes
+- Runs scripts in isolated mode when the folder holds downloaded files
 
 ## Using a Skill
 
