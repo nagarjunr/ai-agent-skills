@@ -1,6 +1,6 @@
-# Productivity Hacks
+# AI Agent Skills
 
-A collection of Claude skills for everyday productivity tasks.
+A collection of skills for Claude Code and other AI agents, for everyday productivity tasks.
 
 ## Skills
 
