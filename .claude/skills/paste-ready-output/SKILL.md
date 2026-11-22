@@ -37,4 +37,4 @@ Save the text to a `.txt` file the user can open and copy from, and also print i
 
 ## Check before handing over
 
-Read the output as the target editor would see it: no leftover markdown, no doubled blank lines, no stray characters, count within the limit. See the `verify-before-delivery` skill for the wider checklist.
+Read the output as the target editor would see it: no leftover markdown, no doubled blank lines, no stray characters, count within the limit. See the `verify-before-reporting` skill for the wider checklist.

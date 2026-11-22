@@ -1,18 +1,6 @@
----
-name: safe-repo-operations
-description: >-
-  Careful procedure for risky git and GitHub operations: pushing to a public repo, moving content
-  between public and private repos, archiving, resetting a diverged fork or branch to upstream,
-  rewriting history, force-pushing, deleting branches or forks, renaming a repo or its local folder,
-  and cleaning commit history. Use whenever the user asks to push, publish, archive, reset, force
-  push, scrub, rename, clean up or "keep history clean", or when a push could expose something
-  private. Covers pre-flight checks, backups, safe force-push syntax, post-push verification and
-  authorship.
----
+# Git and GitHub operations
 
-# Safe repo operations
-
-Git and GitHub operations are cheap to run and expensive to undo. The pattern is always the same: look first, make a backup, do the smallest operation that works, then prove the result.
+Git and GitHub operations are cheap to run and expensive to undo. These are the git-specific steps behind the general rules in `../SKILL.md`: look first, back up, do the smallest operation that works, then prove the result.
 
 ## 1. Look before touching
 

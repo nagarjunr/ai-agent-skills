@@ -1,11 +1,6 @@
----
-name: drawio-confluence-diagrams
-description: >-
-  Rules for generating Draw.io (mxfile XML) diagrams and publishing them to Confluence as attachment-based drawio macros. Covers box and edge styles, orthogonal routing, straight-line layout, label visibility and pre-upload verification. Use when creating or editing architecture, C4 or deployment diagrams for Confluence pages.
-compatibility: Requires the drawio desktop CLI for rendering checks and a Confluence MCP server or API with attachment upload.
----
+# Draw.io diagram rules and Confluence publishing
 
-# Draw.io Diagram Formatting Guidelines
+Detail for the diagram part of the `confluence-docs` skill. Requires the drawio desktop CLI for rendering checks and a Confluence MCP server or API with attachment upload.
 
 ## Publishing to Confluence
 
@@ -276,8 +271,3 @@ These rules override the L-shaped-connection guidance above. Bent lines are a la
 - Generator check (implement it in your diagram generator script): compute each label's bounding box and fail the build when it intersects the border of any container without being fully inside it.
 
 - Label offset sign: in `<mxGeometry x="..." relative="1">` a positive value moves the label toward the edge's **target**, a negative value toward the **source**. For an edge that runs right to left (source on the right), move the label to the right with a negative value. Always render and look, a wrong sign puts the label back on the borders.
-
-## Related
-
-- `docs-update-verify-loop` for the page update and verification workflow.
-- `confluence-storage-format` for the surrounding page markup.

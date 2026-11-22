@@ -8,14 +8,11 @@ A collection of skills for Claude Code and other AI agents, for everyday product
 
 | Skill | What it does |
 |---|---|
-| [verify-before-delivery](#verify-before-delivery) | Measured self-check before handing over any document, spreadsheet, image set or script |
+| [verify-before-reporting](#verify-before-reporting) | Measured self-check before handing over an artifact or reporting a finding from live data |
 | [paste-ready-output](#paste-ready-output) | Plain text that pastes cleanly into web editors and forms, with measured word counts |
-| [safe-repo-operations](#safe-repo-operations) | Careful git and GitHub procedure for pushing, archiving, resetting, force-pushing and renaming |
+| [safe-changes](#safe-changes) | Dry run, backup, canary and confirmation before state-changing work, plus a careful git and GitHub procedure |
 | [python-env-first](#python-env-first) | Pick the right Python and virtualenv before running anything |
-| [verify-live-state](#verify-live-state) | Re-check live state (all pages, latest PR commits, API version gaps) before reporting findings |
-| [safe-production-changes](#safe-production-changes) | Dry run, snapshot, canary and environment checks before state-changing work on live systems |
 | [plan-before-building](#plan-before-building) | Lock scope, environments and verification in a short plan before implementing |
-| [docs-update-verify-loop](#docs-update-verify-loop) | Chunked wiki and diagram updates with a fetch-and-verify pass |
 
 **Tools and methods**
 
@@ -26,8 +23,7 @@ A collection of skills for Claude Code and other AI agents, for everyday product
 | [youtube-playlist-extractor](#youtube-playlist-extractor) | Pull video titles and URLs from a YouTube playlist without an API key |
 | [goldfish-review](#goldfish-review) | Fresh-context fact-check and cold read of a finished draft |
 | [deep-research-methodology](#deep-research-methodology) | Independence audit, adversarial critic and citation checks for cited research |
-| [confluence-storage-format](#confluence-storage-format) | Confluence storage-format rules for macros, code blocks and page updates through an MCP server or API |
-| [drawio-confluence-diagrams](#drawio-confluence-diagrams) | Draw.io styling, straight-line routing and label rules, published to Confluence as editable attachments |
+| [confluence-docs](#confluence-docs) | Safe Confluence page and Draw.io diagram updates: storage-format rules, chunked writes, fetch-and-verify |
 
 ### compress-pdf
 
@@ -171,9 +167,33 @@ Adapted from the methodology of `jordan-gibbs/hyperresearch` (MIT). No code from
 
 ---
 
-### verify-before-delivery
+### confluence-docs
 
-A checklist the agent runs before presenting a finished result, so mistakes are caught by the agent instead of the user.
+Create and update Confluence or wiki pages and Draw.io diagrams safely through an MCP server or API.
+
+**How to Use:**
+
+```
+Sync the architecture pages to the merged code, using confluence-docs
+```
+
+```
+Create this Confluence page with a code block and an info box, and publish the diagram
+```
+
+**What It Does:**
+
+- Keeps page content to the current state, with no pending-change or status notes
+- Gets storage format right: `plain-text-body` for code and noformat, `rich-text-body` for info, tip and expand, with working templates
+- Writes in chunks and re-reads the revision first so a newer edit is never overwritten
+- Re-fetches the page and renders each diagram attachment after the update, finishing with a pass or fail table
+- Draw.io rules in a reference file: sharp-cornered boxes, straight connectors, labels that stay visible, upload under a new file name
+
+---
+
+### verify-before-reporting
+
+A checklist the agent runs before handing over a result or reporting a finding, so mistakes are caught by the agent and not the user. It covers finished artifacts and investigations of live data.
 
 **How to Use:**
 
@@ -181,12 +201,15 @@ A checklist the agent runs before presenting a finished result, so mistakes are 
 Before you give me the final version, verify it and tell me what you could not check
 ```
 
+```
+Investigate why this job fails, and verify the findings against live data
+```
+
 **What It Does:**
 
-- Counts words and pages with a tool instead of estimating, and checks the draft against the rubric line by line
-- Renders every page of a PDF or document, not just page 1
-- Recalculates spreadsheet formulas and checks for error cells
-- Views every image crop to confirm they are distinct and in order
+- Counts words and pages with a tool, renders every page of a PDF or document, recalculates spreadsheet formulas and views every image crop
+- Follows every page of API results, retries on the beta endpoint or in the UI when a stable API hides an object, and re-fetches the latest PR commits before reviewing
+- Recomputes numbers a second way and traces claims to sources
 - Ends with two lists: what was verified (with the numbers) and what was not
 
 ---
@@ -210,27 +233,27 @@ Give me this as plain text I can paste into the editor, under 500 words
 
 ---
 
-### safe-repo-operations
+### safe-changes
 
-A careful procedure for risky git and GitHub operations: look first, back up, do the smallest operation that works, then prove the result.
+Guardrails for state-changing or destructive work: scripts, bulk edits, deployments and deletions on live systems, and risky git and GitHub operations such as pushes, history rewrites, force-pushes and repo renames.
 
 **How to Use:**
+
+```
+Update these tickets in bulk, using safe-changes
+```
 
 ```
 Archive the old repo, reset it to upstream exactly, and push
 ```
 
-```
-Rename this repo and fix the local folder and virtualenv
-```
-
 **What It Does:**
 
-- Pre-flight checks of branches, unpushed commits, visibility and unrelated histories
-- Public versus private triage before anything is published
-- Backup branches, exact resets to upstream, and `--force-with-lease` with a full SHA, only when asked
-- A rename checklist covering the remote, README, local folder, virtualenv paths and path-keyed settings
-- Post-push verification and an honest note about what GitHub still caches after a history rewrite
+- Names the target environments and reports which one was actually changed
+- Requires a `--dry-run`, a backup or state snapshot and a canary before the full run
+- Forbids write tests on real data and deleting resources the agent did not create; confirms destructive steps first
+- Re-reads the live state afterwards and keeps an audit record of before and after values
+- Git and GitHub reference: pre-flight checks, public versus private triage, backup branches, `--force-with-lease` with a full SHA only when asked, a rename checklist and post-push verification
 
 ---
 
@@ -253,44 +276,6 @@ Run this script with the project's own virtualenv, not the system Python
 
 ---
 
-### verify-live-state
-
-Re-check live data before stating a finding. Complements `verify-before-delivery`, which checks finished artifacts.
-
-**How to Use:**
-
-```
-Investigate why this job fails, and use verify-live-state
-```
-
-**What It Does:**
-
-- Follows every page of API results instead of computing from the first page
-- Retries on the beta endpoint or in the UI when a stable API hides an object
-- Re-fetches the latest PR commits before drafting review comments
-- Ends findings with what was checked, how much, and what could not be verified
-
----
-
-### safe-production-changes
-
-Guardrails for state-changing work on live systems such as tickets, cloud resources and directory groups. Complements `safe-repo-operations`, which covers git and GitHub.
-
-**How to Use:**
-
-```
-Update these tickets in bulk, using safe-production-changes
-```
-
-**What It Does:**
-
-- Names the target environments and reports which one was actually changed
-- Requires a `--dry-run`, a state snapshot and a canary before the full run
-- Forbids write tests on real data and deleting resources the agent did not create
-- Produces an audit report of before and after values
-
----
-
 ### plan-before-building
 
 A five-line written plan agreed before implementation, so shifting requirements do not cause repeated redesigns.
@@ -306,62 +291,6 @@ Plan this first with plan-before-building, then wait for my OK
 - Records scope, out-of-scope items, environments, style rules, verification and undo
 - Asks only the questions that change the plan, each with a default
 - Updates the plan in a few lines when requirements change, so dropped items do not return
-
----
-
-### docs-update-verify-loop
-
-Update wiki or Confluence pages and diagrams safely through an API or MCP server.
-
-**How to Use:**
-
-```
-Sync the architecture pages to the merged code, using docs-update-verify-loop
-```
-
-**What It Does:**
-
-- Keeps page content to the current state, with no pending-change or status notes
-- Writes in chunks and re-reads the revision first so a newer edit is never overwritten
-- Re-fetches the page and renders each diagram attachment after the update
-- Finishes with a page-by-page pass or fail table with evidence
-
----
-
-### confluence-storage-format
-
-Rules for writing Confluence storage-format XHTML, so macro content is not silently dropped.
-
-**How to Use:**
-
-```
-Create this Confluence page with a code block and an info box
-```
-
-**What It Does:**
-
-- Distinguishes `plain-text-body` (code, noformat) from `rich-text-body` (info, tip, expand)
-- Gives working templates for code blocks, info boxes and expand macros with nested code
-- Defines the update workflow: locate the page, write storage format directly, replace content
-
----
-
-### drawio-confluence-diagrams
-
-Draw.io diagram rules for Confluence pages, with Confluence publishing steps.
-
-**How to Use:**
-
-```
-Draw the container view as a Draw.io diagram and publish it to the page
-```
-
-**What It Does:**
-
-- Sharp-cornered boxes, a standard colour palette and orthogonal edges with arc jumps
-- Straight connectors wherever possible, with exit and entry points computed from a shared coordinate
-- Edge labels that stay fully visible, off borders and boxes
-- Render, check and upload under a new file name, then compare file sizes
 
 ## Using a Skill
 

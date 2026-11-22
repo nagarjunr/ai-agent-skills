@@ -38,5 +38,5 @@ The task is a single read-only lookup or a one-line edit.
 
 ## Related
 
-- `verify-before-delivery` for the checks to run against the plan's Verification items.
-- `safe-production-changes` when the plan touches live systems.
+- `verify-before-reporting` for the checks to run against the plan's Verification items.
+- `safe-changes` when the plan touches live systems or git and GitHub operations.
